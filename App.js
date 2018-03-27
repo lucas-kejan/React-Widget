@@ -6,19 +6,32 @@
 
 import React, { Component } from 'react';
 import {
+  NativeModules,
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Button
 } from 'react-native';
 
+const { BackgroundTaskBridge } = NativeModules
+
 export default class App extends Component<{}> {
+
+  _handleButtonPress = () => {
+    BackgroundTaskBridge.pinWidgetToHomeScreen();
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
           Welcome to React Native!
         </Text>
+        <Button
+         title="Add"
+         onPress={this._handleButtonPress}
+         />
         <Text style={styles.instructions}>
           To get started, edit App.js and widgetTask.js
         </Text>
