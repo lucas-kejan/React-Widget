@@ -1,0 +1,25 @@
+{
+	"name": "react-native-android-widget-poc",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"test": "jest"
+	},
+	"dependencies": {
+		"lodash": "^4.17.5",
+		"react": "16.2.0",
+		"react-native": "0.54.2",
+		"react-native-background-timer": "^2.0.1",
+		"react-native-xml2js": "^1.0.3"
+	},
+	"devDependencies": {
+		"babel-jest": "23.0.0-alpha.0",
+		"babel-preset-react-native": "4.0.0",
+		"jest": "22.4.2",
+		"react-test-renderer": "16.2.0"
+	},
+	"jest": {
+		"preset": "react-native"
+	}
+}
