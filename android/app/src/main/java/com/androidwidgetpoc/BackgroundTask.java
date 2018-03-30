@@ -15,9 +15,6 @@ public class BackgroundTask extends HeadlessJsTaskService {
     protected @Nullable
     HeadlessJsTaskConfig getTaskConfig(Intent intent) {
         Bundle extras = intent.getExtras();
-        return new HeadlessJsTaskConfig(
-                "WidgetTask",
-                extras != null ? Arguments.fromBundle(extras) : null,
-                5000);
+        return new HeadlessJsTaskConfig("WidgetTask", extras != null ? Arguments.fromBundle(extras) : null, 5000);
     }
 }

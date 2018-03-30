@@ -6,21 +6,13 @@
 
 import React, { Component } from 'react';
 import {
-  NativeModules,
   Platform,
   StyleSheet,
   Text,
-  View,
-  Button
+  View
 } from 'react-native';
 
-const { BackgroundTaskBridge } = NativeModules
-
 export default class App extends Component<{}> {
-
-  _handleButtonPress = () => {
-    BackgroundTaskBridge.pinWidgetToHomeScreen();
-  }
 
   render() {
     return (
@@ -28,10 +20,6 @@ export default class App extends Component<{}> {
         <Text style={styles.welcome}>
           Welcome to React Native!
         </Text>
-        <Button
-         title="Add"
-         onPress={this._handleButtonPress}
-         />
         <Text style={styles.instructions}>
           To get started, edit App.js and widgetTask.js
         </Text>
