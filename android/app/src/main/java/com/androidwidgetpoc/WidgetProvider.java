@@ -35,13 +35,13 @@ public class WidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds){
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget);
-            Intent svcIntent = new Intent(context, WidgetService.class);
+            /*Intent svcIntent = new Intent(context, WidgetService.class);
             svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
               remoteViews.setRemoteAdapter(R.id.listViewWidget, svcIntent);
             else
-              remoteViews.setRemoteAdapter(appWidgetId, R.id.listViewWidget, svcIntent);
+              remoteViews.setRemoteAdapter(appWidgetId, R.id.listViewWidget, svcIntent);*/
 
             remoteViews.setEmptyView(R.id.listViewWidget, R.id.empty_view);
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);

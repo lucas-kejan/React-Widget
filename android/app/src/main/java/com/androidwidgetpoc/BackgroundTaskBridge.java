@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.RemoteViews;
 import android.content.Intent;
+import android.net.Uri;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -19,6 +20,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 import android.widget.*;
 
@@ -36,10 +40,33 @@ public class BackgroundTaskBridge extends ReactContextBaseJavaModule {
     public void initializeWidgetBridge(ReadableArray starredCharms) {
         RemoteViews widgetView = new RemoteViews(this.getReactApplicationContext().getPackageName(), R.layout.appwidget);
         widgetView.removeAllViews(R.id.charms_layout);
+        JSONArray obj = new JSONArray();
         for (int i = 0; i < starredCharms.size(); i++) {
           ReadableMap charm = starredCharms.getMap(i);
-          updateView(widgetView, charm, R.layout.list_row);
+          JSONObject el = new JSONObject();
+          String bio = charm.getString("bio").replace("\r","").replace("\n","").replace("\t","");
+          try {
+          el.put("heading",charm.getString("name"));
+          el.put("content",bio);
+          el.put("ch",charm.getString("imageurl"));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+          obj.put(el);
+          //updateView(widgetView, charm, R.layout.list_row);
+        }
+        ReadableMap charm = starredCharms.getMap(0);
+        String bio = charm.getString("bio").replace("\r","").replace("\n","").replace("\t","");
+
+        Intent svcIntent = new Intent(this.getReactApplicationContext(), WidgetService.class);
+        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, (new ComponentName(this.getReactApplicationContext(), WidgetProvider.class)));
+        /*svcIntent.putExtra("heading", charm.getString("name"));
+        svcIntent.putExtra("content", bio);
+        svcIntent.putExtra("ch", charm.getString("imageurl"));*/
+        svcIntent.putExtra("array", obj.toString());
+        svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
+        widgetView.setRemoteAdapter(R.id.listViewWidget, svcIntent);
+
         AppWidgetManager.getInstance(this.getReactApplicationContext()).updateAppWidget(new ComponentName(this.getReactApplicationContext(), WidgetProvider.class), widgetView);
     }
 

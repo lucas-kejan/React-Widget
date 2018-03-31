@@ -1,9 +1,12 @@
 package com.androidwidgetpoc;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
@@ -12,13 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class ListProvider implements RemoteViewsFactory {
     private ArrayList<ListItem> listItemList = new ArrayList<ListItem>();
@@ -28,50 +27,31 @@ public class ListProvider implements RemoteViewsFactory {
     public ListProvider(Context context, Intent intent) {
         this.context = context;
         appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-        populateListItem();
-
-        /*String url = "https://www.simplifiedcoding.net/demos/marvel/";
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url).build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String myResponse = response.body().string();
-                    try {
-                        JSONArray Jobject = new JSONArray(myResponse);
-                        respJson(Jobject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });*/
+        Bundle extras = intent.getExtras();
+        /*String heading = extras.getString("heading");
+        String content = extras.getString("content");
+        String ch = extras.getString("ch");*/
+        String array = intent.getStringExtra("array");
+        populateListItem(array);
     }
 
-    private void respJson(JSONArray Jarray) throws JSONException {
-        Log.v("Mess:",""+Jarray);
-        Log.v("Lenght:",""+Jarray.length());
-        for (int i = 0; i < Jarray.length(); i++) {
-            JSONObject object = Jarray.getJSONObject(i);
-            ListItem listItem = new ListItem();
-            Log.v("User:",object.getString("name"));
-            listItem.heading = object.getString("name");
-            listItem.content = object.getString("realname");
-            listItemList.add(listItem);
-        }
+    private void populateListItem(String array){
+      JSONArray arr = null;
+      try {
+      arr = new JSONArray(array);
+    } catch (JSONException e) {
+        e.printStackTrace();
     }
-
-    private void populateListItem(){
-        for (int i = 0; i < 22; i++) {
+        for (int i = 0; i <  5; i++) {
             ListItem listItem = new ListItem();
-            listItem.heading = "Hi";
-            listItem.content = i + " This is the content of the app widget listview.";
+            try {
+                JSONObject o = arr.getJSONObject(i);
+                listItem.heading = o.getString("heading");
+            listItem.content = o.getString("content");
+            listItem.ch = o.getString("ch");
+          } catch (JSONException e) {
+              e.printStackTrace();
+          }
             listItemList.add(listItem);
         }
     }
@@ -88,12 +68,43 @@ public class ListProvider implements RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int position) {
-        final RemoteViews remoteView = new RemoteViews(
-                context.getPackageName(), R.layout.list_row);
+        final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.list_row);
         ListItem listItem = listItemList.get(position);
-        //remoteView.setImageViewUri(R.id.imageView, listItem.imageView);
+        URL url = null;
+        try {
+            url = new URL(listItem.ch);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        Bitmap bmp = null;
+        try {
+            bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        remoteView.setImageViewBitmap(R.id.ch, bmp);
         remoteView.setTextViewText(R.id.heading, listItem.heading);
         remoteView.setTextViewText(R.id.content, listItem.content);
+
+        Intent intent = new Intent(context, CustomReactActivity.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);  // Identifies the particular widget...
+        intent.putExtra("module", "react-native-android-widget-poc");
+        Bundle b = new Bundle();
+        b.putString("navigationKey","MedicationScreen");
+
+        Bundle med = new Bundle();
+        med.putString("medId", listItem.heading);
+        med.putString("medName", listItem.content);
+
+        b.putBundle("medication",med);
+
+        intent.putExtra("data",b);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // Make the pending intent unique...
+        PendingIntent pendIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        remoteView.setOnClickPendingIntent(R.id.ch, pendIntent);
         return remoteView;
     }
 

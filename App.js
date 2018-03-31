@@ -15,6 +15,20 @@ import {
 export default class App extends Component<{}> {
 
   render() {
+    const { navigationKey, medication } = this.props;
+    console.log(this.props);
+    if (navigationKey === 'MedicationScreen') {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.instructions}>
+            I am in medication screen !
+          </Text>
+          <Text style={styles.instructions}>
+            {medication.medId} {medication.medName}
+          </Text>
+        </View>
+      );
+    }
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>

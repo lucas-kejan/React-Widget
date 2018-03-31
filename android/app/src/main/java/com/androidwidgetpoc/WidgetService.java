@@ -1,6 +1,5 @@
 package com.androidwidgetpoc;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.widget.RemoteViewsService;
 
