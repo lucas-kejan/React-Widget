@@ -33,15 +33,15 @@ public class WidgetProvider extends AppWidgetProvider {
 		      /*int[] appWidgetIds holds ids of multiple instance of your widget
 		        * meaning you are placing more than one widgets on your homescreen*/
         for (int appWidgetId : appWidgetIds){
-            //Intent svcIntent = new Intent(context, MyWidgetService.class);
-            //svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget);
-
-            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+            Intent svcIntent = new Intent(context, WidgetService.class);
+            svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
               remoteViews.setRemoteAdapter(R.id.listViewWidget, svcIntent);
             else
-              remoteViews.setRemoteAdapter(appWidgetId, R.id.listViewWidget, svcIntent);*/
+              remoteViews.setRemoteAdapter(appWidgetId, R.id.listViewWidget, svcIntent);
 
             remoteViews.setEmptyView(R.id.listViewWidget, R.id.empty_view);
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
