@@ -67,7 +67,4 @@ public class BackgroundTaskBridge extends ReactContextBaseJavaModule {
         //views.setRemoteAdapter(R.id.listViewWidget, intent);
     }
 
-    private static int getDrawable(Context context, String name){
-        return context.getResources().getIdentifier(name.toLowerCase(),"drawable", context.getPackageName());
-    }
 }
