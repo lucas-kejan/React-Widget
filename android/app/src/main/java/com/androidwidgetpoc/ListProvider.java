@@ -28,9 +28,6 @@ public class ListProvider implements RemoteViewsFactory {
         this.context = context;
         appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         Bundle extras = intent.getExtras();
-        /*String heading = extras.getString("heading");
-        String content = extras.getString("content");
-        String ch = extras.getString("ch");*/
         String array = intent.getStringExtra("array");
         populateListItem(array);
     }
@@ -38,15 +35,15 @@ public class ListProvider implements RemoteViewsFactory {
     private void populateListItem(String array){
       JSONArray arr = null;
       try {
-      arr = new JSONArray(array);
-    } catch (JSONException e) {
-        e.printStackTrace();
-    }
+          arr = new JSONArray(array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i <  5; i++) {
             ListItem listItem = new ListItem();
             try {
-                JSONObject o = arr.getJSONObject(i);
-                listItem.heading = o.getString("heading");
+            JSONObject o = arr.getJSONObject(i);
+            listItem.heading = o.getString("heading");
             listItem.content = o.getString("content");
             listItem.ch = o.getString("ch");
           } catch (JSONException e) {
@@ -88,7 +85,8 @@ public class ListProvider implements RemoteViewsFactory {
 
         Intent intent = new Intent(context, CustomReactActivity.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);  // Identifies the particular widget...
-        intent.putExtra("module", "react-native-android-widget-poc");
+        intent.putExtra("module", "androidWidgetPoc");
+
         Bundle b = new Bundle();
         b.putString("navigationKey","MedicationScreen");
 
@@ -101,10 +99,8 @@ public class ListProvider implements RemoteViewsFactory {
         intent.putExtra("data",b);
 
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        // Make the pending intent unique...
-        PendingIntent pendIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        remoteView.setOnClickPendingIntent(R.id.ch, pendIntent);
+        remoteView.setOnClickFillInIntent(R.id.widgetItemContainer, intent);
         return remoteView;
     }
 

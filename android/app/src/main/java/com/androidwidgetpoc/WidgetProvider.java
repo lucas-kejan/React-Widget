@@ -1,6 +1,8 @@
 package com.androidwidgetpoc;
 
 import android.annotation.TargetApi;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -35,13 +37,16 @@ public class WidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds){
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget);
-            /*Intent svcIntent = new Intent(context, WidgetService.class);
-            svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-              remoteViews.setRemoteAdapter(R.id.listViewWidget, svcIntent);
-            else
-              remoteViews.setRemoteAdapter(appWidgetId, R.id.listViewWidget, svcIntent);*/
+
+            Intent titleIntent = new Intent(context, MainActivity.class);
+            PendingIntent titlePendingIntent = PendingIntent.getActivity(context, 0, titleIntent, 0);
+            remoteViews.setOnClickPendingIntent(R.id.title, titlePendingIntent);
+
+            Intent clickIntentTemplate = new Intent(context, CustomReactActivity.class);
+            PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
+                    .addNextIntentWithParentStack(clickIntentTemplate)
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setPendingIntentTemplate(R.id.listViewWidget, clickPendingIntentTemplate);
 
             remoteViews.setEmptyView(R.id.listViewWidget, R.id.empty_view);
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);

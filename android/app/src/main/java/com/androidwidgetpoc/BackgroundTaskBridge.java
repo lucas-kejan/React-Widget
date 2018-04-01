@@ -30,9 +30,6 @@ public class BackgroundTaskBridge extends ReactContextBaseJavaModule {
 
     public BackgroundTaskBridge(final ReactApplicationContext reactContext) { super(reactContext); }
 
-    //ArrayList<ListItem> lista = new ArrayList<ListItem>();
-    //ArrayAdapter<ListItem> adaptor;
-
     @Override
     public String getName() { return "BackgroundTaskBridge"; }
 
@@ -55,14 +52,9 @@ public class BackgroundTaskBridge extends ReactContextBaseJavaModule {
           obj.put(el);
           //updateView(widgetView, charm, R.layout.list_row);
         }
-        ReadableMap charm = starredCharms.getMap(0);
-        String bio = charm.getString("bio").replace("\r","").replace("\n","").replace("\t","");
 
         Intent svcIntent = new Intent(this.getReactApplicationContext(), WidgetService.class);
         svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, (new ComponentName(this.getReactApplicationContext(), WidgetProvider.class)));
-        /*svcIntent.putExtra("heading", charm.getString("name"));
-        svcIntent.putExtra("content", bio);
-        svcIntent.putExtra("ch", charm.getString("imageurl"));*/
         svcIntent.putExtra("array", obj.toString());
         svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
         widgetView.setRemoteAdapter(R.id.listViewWidget, svcIntent);
@@ -70,7 +62,7 @@ public class BackgroundTaskBridge extends ReactContextBaseJavaModule {
         AppWidgetManager.getInstance(this.getReactApplicationContext()).updateAppWidget(new ComponentName(this.getReactApplicationContext(), WidgetProvider.class), widgetView);
     }
 
-    private void updateView(RemoteViews widgetView, ReadableMap charm, Integer layout) {
+    /*private void updateView(RemoteViews widgetView, ReadableMap charm, Integer layout) {
         String bio = charm.getString("bio").replace("\r","").replace("\n","").replace("\t","");
         RemoteViews charm_view = new RemoteViews(this.getReactApplicationContext().getPackageName(), layout);
         URL url = null;
@@ -88,10 +80,7 @@ public class BackgroundTaskBridge extends ReactContextBaseJavaModule {
         charm_view.setImageViewBitmap(R.id.ch, bmp);
         charm_view.setTextViewText(R.id.heading, charm.getString("name"));
         charm_view.setTextViewText(R.id.content,bio);
-        //lista.add(new Contact(nume, prenume));
-        //adaptor.notifyDataSetChanged();
         widgetView.addView(R.id.charms_layout, charm_view);
-        //views.setRemoteAdapter(R.id.listViewWidget, intent);
-    }
+    }*/
 
 }

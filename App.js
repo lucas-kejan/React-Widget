@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   Platform,
@@ -24,7 +18,10 @@ export default class App extends Component<{}> {
             I am in medication screen !
           </Text>
           <Text style={styles.instructions}>
-            {medication.medId} {medication.medName}
+            {medication.medId}
+          </Text>
+          <Text style={styles.instructions}>
+            {medication.medName}
           </Text>
         </View>
       );

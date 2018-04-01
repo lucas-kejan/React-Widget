@@ -1,7 +1,3 @@
-/**
-* @flow
-*/
-
 import { NativeModules, ToastAndroid } from 'react-native'
 import bgTimer from 'react-native-background-timer'
 
@@ -42,7 +38,6 @@ export default async function widgetTask (taskData: TaskInfo) {
 
 export function synchronizeWidget (a) {
   ToastAndroid.show(`Initializing ...`, ToastAndroid.SHORT);
-  //BackgroundTaskBridge.pinWidgetToHomeScreen();
   BackgroundTaskBridge.initializeWidgetBridge(a)
 }
 

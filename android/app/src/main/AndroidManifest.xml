@@ -14,6 +14,17 @@
             </intent-filter>
         </activity>
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
+        <activity
+                  android:name=".CustomReactActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                  android:label="@string/app_name"
+                  android:windowSoftInputMode="adjustResize">
+                  <intent-filter>
+                    <category android:name="android.intent.category.DEFAULT" />
+                  </intent-filter>
+                </activity>
+
         <receiver android:name="WidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
