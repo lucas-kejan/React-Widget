@@ -39,7 +39,7 @@ public class ListProvider implements RemoteViewsFactory {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        for (int i = 0; i <  5; i++) {
+        for (int i = 0; i <  arr.length(); i++) {
             ListItem listItem = new ListItem();
             try {
             JSONObject o = arr.getJSONObject(i);
